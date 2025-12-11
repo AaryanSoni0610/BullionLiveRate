@@ -58,30 +58,17 @@ def display_live():
                 time.sleep(0.5)
                 continue
 
-            # Layout based on LiveRates4.js
-            top_tiles = inst[:3]
-            futures = inst[3:5]
-            products = inst[5:]
+            products = inst[9:-1]+inst[8:9]+inst[7:8]+inst[5:6]
 
-            print("==== LIVE RATES (SundhaGold.com) ====\n")
-
-            # -------- TOP TILES (SILVER / GOLD / USDINR) --------
-            print("=== TOP (Silver / Gold / USDINR) ===")
-            for x in top_tiles:
-                print(f"{x.name:12} | Buy/LTP: {x.buy:>8} | Sell: {x.sell:>8} | High: {x.high:>8} | Low: {x.low:>8}")
-            print()
-
-            # -------- FUTURES TABLE --------
-            print("=== FUTURES ===")
-            print(f"{'PRODUCT':18} | {'BID':>8} | {'ASK':>8} | {'HIGH':>8} | {'LOW':>8}")
-            for x in futures:
-                print(f"{x.name:18} | {x.buy:>8} | {x.sell:>8} | {x.high:>8} | {x.low:>8}")
-            print()
-
-            # -------- PRODUCTS TABLE (RANI, CHORSA, Gold 999, etc.) --------
-            print("=== PRODUCTS ===")
-            print(f"{'PRODUCT':18} | {'BUY':>8} | {'SELL':>8} | {'HIGH':>8} | {'LOW':>8}")
+            print("      Name         |    Buy   |   Sell   |   High   |    Low   ")
+            print("-------------------|----------|----------|----------|----------")
             for x in products:
+                if x.name == "Gold 999":
+                    x.name = "GOLD 999 IMP"
+                elif x.name == "SILVER CHORSA 98":
+                    x.name = "SILVER 98"
+                elif x.name == "gold 9950 impoted":
+                    x.name = "GOLD 9920 Ketbary"
                 print(f"{x.name:18} | {x.buy:>8} | {x.sell:>8} | {x.high:>8} | {x.low:>8}")
 
             time.sleep(0.5)

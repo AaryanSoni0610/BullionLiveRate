@@ -21,7 +21,6 @@ def disconnect():
 @sio.on("message")
 def on_message(data):
     os.system('cls' if os.name == 'nt' else 'clear')
-    print("--- Product Table Update (message event) ---\n")
 
     # The JS uses `let rates = data;` directly, so `data` should already be a list of objects.
     if isinstance(data, str):
@@ -37,34 +36,28 @@ def on_message(data):
         print(data)
         return
 
-    for prod in data:
-        name    = prod.get("Symbol")           # "GOLD 999 IMP/ KKM", "RANI", "RUPA", ...
+    
+    print("      Name         |    Buy   |   Sell   |   High   |    Low   ")
+    print("-------------------|----------|----------|----------|----------")
+    for prod in data[:5]:
+        name    = prod.get("Symbol")
         bid     = prod.get("Bid")
         ask     = prod.get("Ask")
         is_disp = prod.get("IsDisplay")
+        high    = prod.get("High")
+        low     = prod.get("Low")
+        
+        if name == "98 CHORSA":
+            name = "SILVER 98"
+        elif name == "GOLD 999 IMP/ KKM":
+            name = "GOLD 999 IMP"
+        elif name == "GOLD  995 IMP":
+            name = "GOLD 9920 Ketbary"
 
         if not is_disp:
             continue
 
-        print(f"{name:22} | Buy: {bid:>8} | Sell: {ask:>8}")
-
-    print("\n--- end product table ---\n")
-
-# ---- 2) OPTIONAL: raw MCX/COMEX feed (what you already had) ----
-@sio.on("Liverate")
-def on_liverate(raw_list):
-    print("--- Liverate (MCX/COMEX) snapshot ---")
-    for item in raw_list:
-        try:
-            entry = json.loads(item)
-        except Exception:
-            continue
-        sym = entry.get("symbol") or entry.get("Name")
-        bid = entry.get("Bid")
-        ask = entry.get("Ask")
-        t   = entry.get("Time")
-        print(f"{sym:10} | Buy: {bid:>8} | Sell: {ask:>8} | {t}")
-    print()
+        print(f"{name:18} | {bid:>8} | {ask:>8} | {high:>8} | {low:>8}")
 
 # ---- 3) See the reference data, if you want ----
 @sio.on("ClientData")
